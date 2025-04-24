@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de Control - Leidy - Serviwash del Llano</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .main-content h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .main-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .chart-container {
+            margin: 2rem 0;
+            height: 400px;
+            position: relative;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 2px solid #f1f1f1;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            margin-right: 0.5rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stats-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-card h3 {
+            color: #3498db;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #ecf0f1;
+        }
+        
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .conclusion-container {
+            background-color: #eaf4fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .conclusion-container h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        
+        .status-stable {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-unstable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-list {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .action-list li {
+            margin-bottom: 0.7rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Gráficos de Control - Leidy</h1>
+            <p>Análisis de Estabilidad del Proceso - Serviwash del Llano</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main class="main-content">
+            <h2>Análisis de Estabilidad del Proceso</h2>
+            
+            <p>En esta página se presentan los gráficos de control estadístico para el análisis de estabilidad del proceso de servicio de lavado automotriz en Serviwash del Llano, como parte del proyecto de mejora "Brillante Eficiencia".</p>
+            
+            <div class="tab-container">
+                <button class="tab active" onclick="showChart('xbar-chart')">Gráfico X-barra</button>
+                <button class="tab" onclick="showChart('range-chart')">Gráfico de Rango</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="xbar-chart"></canvas>
+                <canvas id="range-chart" style="display: none;"></canvas>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stats-card">
+                    <h3>Estadísticas X-barra</h3>
+                    <div class="stats-item">
+                        <span>LSC:</span>
+                        <span class="stats-value" id="xbar-ucl">29.55 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Línea Central:</span>
+                        <span class="stats-value" id="xbar-cl">25.44 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>LIC:</span>
+                        <span class="stats-value" id="xbar-lcl">21.34 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Estado:</span>
+                        <span class="stats-value" id="xbar-status">Bajo control</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Estadísticas de Rango</h3>
+                    <div class="stats-item">
+                        <span>LSC:</span>
+                        <span class="stats-value" id="range-ucl">15.05 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Línea Central:</span>
+                        <span class="stats-value" id="range-cl">7.12 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>LIC:</span>
+                        <span class="stats-value" id="range-lcl">0.00 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Estado:</span>
+                        <span class="stats-value" id="range-status">Bajo control</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Índices de Capacidad</h3>
+                    <div class="stats-item">
+                        <span>Cp:</span>
+                        <span class="stats-value">0.73</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Cpk:</span>
+                        <span class="stats-value">0.66</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Dentro de especificaciones:</span>
+                        <span class="stats-value">97%</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Límites de especificación:</span>
+                        <span class="stats-value">20 - 30 minutos</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conclusion-container">
+                <h3>Conclusión del Análisis de Estabilidad</h3>
+                
+                <p>Según el análisis de los gráficos de control para el tiempo de servicio en Serviwash del Llano:</p>
+                
+                <div class="status status-stable">
+                    ESTABLE (bajo control estadístico)
+                </div>
+                
+                <p>El proceso está bajo control estadístico, lo que significa que la variación observada se debe únicamente a causas comunes inherentes al proceso. No se identificaron causas especiales de variación.</p>
+                
+                <p>Sin embargo, los índices de capacidad (Cp = 0.73, Cpk = 0.66) indican que el proceso aún no es capaz de cumplir consistentemente con las especificaciones (20-30 minutos).</p>
+                
+                <h3>Acciones Recomendadas:</h3>
+                
+                <ul class="action-list">
+                    <li>Continuar con la implementación de la metodología 5S, enfocándose en la estandarización (Seiketsu)</li>
+                    <li>Crear procedimientos operativos estándar para cada operación del proceso de lavado</li>
+                    <li>Implementar un sistema de capacitación para todos los operarios</li>
+                    <li>Reducir la variabilidad del proceso para mejorar los índices de capacidad</li>
+                    <li>Establecer un programa de mantenimiento preventivo para los equipos</li>
+                    <li>Implementar controles visuales en el área de trabajo</li>
+                    <li>Continuar el monitoreo regular con gráficos de control</li>
+                </ul>
+            </div>
+            
+            <div class="btn-container">
+                <a href="index.html" class="btn">Volver al Inicio</a>
+                <button class="btn" onclick="window.print()">Imprimir Informe</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 Serviwash del Llano - Proyecto de Mejora "Brillante Eficiencia"</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Datos simulados basados en el análisis previo
+        const subgroupNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+        
+        // Datos para X-barra
+        const xbarData = [25.03, 26.40, 25.72, 25.84, 24.67, 24.22, 25.71, 25.95];
+        const xbarUCL = 29.55;
+        const xbarCL = 25.44;
+        const xbarLCL = 21.34;
+        
+        // Datos para Rango
+        const rangeData = [6.63, 6.93, 6.46, 7.16, 4.09, 11.78, 5.70, 8.19];
+        const rangeUCL = 15.05;
+        const rangeCL = 7.12;
+        const rangeLCL = 0;
+        
+        // Inicializar gráficos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar gráfico X-barra
+            const xbarCtx = document.getElementById('xbar-chart').getContext('2d');
+            const xbarChart = new Chart(xbarCtx, {
+                type: 'line',
+                data: {
+                    labels: subgroupNumbers,
+                    datasets: [
+                        {
+                            label: 'Media',
+                            data: xbarData,
+                            borderColor: '#3498db',
+                            backgroundColor: '#3498db',
+                            tension: 0.1,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'LSC',
+                            data: Array(subgroupNumbers.length).fill(xbarUCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'Línea Central',
+                            data: Array(subgroupNumbers.length).fill(xbarCL),
+                            borderColor: '#2ecc71',
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'LIC',
+                            data: Array(subgroupNumbers.length).fill(xbarLCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Control X-barra - Tiempo de Servicio',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Tiempo (minutos)'
+                            },
+                            min: Math.min(xbarLCL, Math.min(...xbarData)) - 1,
+                            max: Math.max(xbarUCL, Math.max(...xbarData)) + 1
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Subgrupo'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Inicializar gráfico de Rango
+            const rangeCtx = document.getElementById('range-chart').getContext('2d');
+            const rangeChart = new Chart(rangeCtx, {
+                type: 'line',
+                data: {
+                    labels: subgroupNumbers,
+                    datasets: [
+                        {
+                            label: 'Rango',
+                            data: rangeData,
+                            borderColor: '#9b59b6',
+                            backgroundColor: '#9b59b6',
+                            tension: 0.1,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'LSC',
+                            data: Array(subgroupNumbers.length).fill(rangeUCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'Línea Central',
+                            data: Array(subgroupNumbers.length).fill(rangeCL),
+                            borderColor: '#2ecc71',
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'LIC',
+                            data: Array(subgroupNumbers.length).fill(rangeLCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Control de Rango - Tiempo de Servicio',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Rango (minutos)'
+                            },
+                            min: 0,
+                            max: Math.max(rangeUCL, Math.max(...rangeData)) + 2
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Subgrupo'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Función para cambiar entre gráficos
+        function showChart(chartId) {
+            const xbarChart = document.getElementById('xbar-chart');
+            const rangeChart = document.getElementById('range-chart');
+            const tabs = document.querySelectorAll('.tab');
+            
+            if (chartId === 'xbar-chart') {
+                xbarChart.style.display = 'block';
+                rangeChart.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            } else {
+                xbarChart.style.display = 'none';
+                rangeChart.style.display = 'block';
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

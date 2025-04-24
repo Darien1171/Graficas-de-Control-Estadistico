@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de Control - Serviwash del Llano</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .main-content h1 {
+            color: #2c3e50;
+            margin-bottom: 2.5rem;
+            padding-bottom: 0.5rem;
+            font-size: 2.5rem;
+            position: relative;
+        }
+        
+        .main-content h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #3498db;
+        }
+        
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            padding: 0 1rem;
+        }
+        
+        .button {
+            display: block;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background-color: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ecf0f1;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content h1 {
+                font-size: 2rem;
+            }
+            
+            .button-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .button-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main class="main-content">
+            <h1>Bienvenido al Portal de Gráficos de Control</h1>
+            
+            <div class="button-container">
+                <a href="leidy.html" class="button">Leidy</a>
+                <a href="#" class="button" onclick="alert('Página en construcción')">Brayan</a>
+                <a href="#" class="button" onclick="alert('Página en construcción')">Carlos</a>
+                <a href="#" class="button" onclick="alert('Página en construcción')">María</a>
+                <a href="#" class="button" onclick="alert('Página en construcción')">Juan</a>
+                <a href="#" class="button" onclick="alert('Página en construcción')">Sofía</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
