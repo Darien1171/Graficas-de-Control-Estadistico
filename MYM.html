@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de Control - Multiservicios MYM de Colombia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .main-content h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .main-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .chart-container {
+            margin: 2rem 0;
+            height: 400px;
+            position: relative;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 2px solid #f1f1f1;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            margin-right: 0.5rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stats-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-card h3 {
+            color: #3498db;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 0.5rem;
+        }
+        
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #ecf0f1;
+        }
+        
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .conclusion-container {
+            background-color: #eaf4fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .conclusion-container h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        
+        .status-stable {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-unstable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-list {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .action-list li {
+            margin-bottom: 0.7rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Gráficos de Control - Multiservicios MYM</h1>
+            <p>Análisis de Estabilidad del Tiempo de Respuesta en Servicios de Emergencia</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main class="main-content">
+            <h2>Análisis de Estabilidad del Proceso</h2>
+            
+            <p>En esta página se presentan los gráficos de control estadístico para el análisis de estabilidad del proceso de atención de servicios de emergencia en Multiservicios MYM de Colombia, como parte del proyecto de mejora para optimizar el tiempo de respuesta.</p>
+            
+            <div class="tab-container">
+                <button class="tab active" onclick="showChart('xbar-chart')">Gráfico X-barra</button>
+                <button class="tab" onclick="showChart('range-chart')">Gráfico de Rango</button>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="xbar-chart"></canvas>
+                <canvas id="range-chart" style="display: none;"></canvas>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stats-card">
+                    <h3>Estadísticas X-barra</h3>
+                    <div class="stats-item">
+                        <span>LSC:</span>
+                        <span class="stats-value" id="xbar-ucl">655.12 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Línea Central:</span>
+                        <span class="stats-value" id="xbar-cl">597.77 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>LIC:</span>
+                        <span class="stats-value" id="xbar-lcl">540.42 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Estado:</span>
+                        <span class="stats-value" id="xbar-status">Fuera de control</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Estadísticas de Rango</h3>
+                    <div class="stats-item">
+                        <span>LSC:</span>
+                        <span class="stats-value" id="range-ucl">196.88 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Línea Central:</span>
+                        <span class="stats-value" id="range-cl">93.13 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>LIC:</span>
+                        <span class="stats-value" id="range-lcl">0.00 minutos</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Estado:</span>
+                        <span class="stats-value" id="range-status">Fuera de control</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>Índices de Capacidad</h3>
+                    <div class="stats-item">
+                        <span>Cp:</span>
+                        <span class="stats-value">0.67</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Cpk:</span>
+                        <span class="stats-value">0.69</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Dentro de especificaciones:</span>
+                        <span class="stats-value">98%</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Límites de especificación:</span>
+                        <span class="stats-value">0 - 720 minutos</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="conclusion-container">
+                <h3>Conclusión del Análisis de Estabilidad</h3>
+                
+                <p>Según el análisis de los gráficos de control para el tiempo de respuesta en servicios de emergencia en Multiservicios MYM de Colombia:</p>
+                
+                <div class="status status-unstable">
+                    INESTABLE (fuera de control estadístico)
+                </div>
+                
+                <p>El proceso NO está bajo control estadístico, lo que significa que existen causas especiales de variación que deben ser identificadas y eliminadas. Se identificaron puntos fuera de los límites de control, principalmente en el gráfico de rangos, lo que indica una alta variabilidad entre algunas mediciones.</p>
+                
+                <p>Adicionalmente, los índices de capacidad (Cp = 0.67, Cpk = 0.69) indican que el proceso no es capaz de cumplir consistentemente con las especificaciones (0-720 minutos), a pesar de que el 98% de las mediciones se encuentran dentro de los límites de especificación.</p>
+                
+                <h3>Acciones Recomendadas:</h3>
+                
+                <ul class="action-list">
+                    <li>Identificar y eliminar las causas especiales de variación, especialmente para los subgrupos con puntos fuera de los límites de control</li>
+                    <li>Implementar el programa 5S en el área de almacenamiento para reducir los tiempos de preparación</li>
+                    <li>Optimizar la asignación de técnicos según ubicación geográfica para reducir tiempos de desplazamiento</li>
+                    <li>Estandarizar los procedimientos de diagnóstico para reducir la variabilidad entre técnicos</li>
+                    <li>Implementar gestión visual de recursos y disponibilidad de técnicos</li>
+                    <li>Balancear cargas de trabajo con turnos flexibles, especialmente en horas pico</li>
+                    <li>Mejorar el sistema de medición según las recomendaciones del análisis previo</li>
+                    <li>Reanalizar los datos después de implementar estas mejoras para verificar la estabilidad</li>
+                </ul>
+            </div>
+            
+            <div class="btn-container">
+                <a href="index.html" class="btn">Volver al Inicio</a>
+                <button class="btn" onclick="window.print()">Imprimir Informe</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 Multiservicios MYM de Colombia - Proyecto de Optimización de Tiempos de Respuesta</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Datos de los subgrupos (20 subgrupos de 5 valores cada uno)
+        const subgroupNumbers = Array.from({ length: 20 }, (_, i) => i + 1);
+        
+        // Datos de medias por subgrupo para X-barra (calculados previamente)
+        const xbarData = [
+            615.80, 593.80, 620.00, 575.80, 588.60, 
+            634.60, 586.60, 632.00, 544.20, 546.60, 
+            616.60, 569.80, 596.80, 571.80, 581.80, 
+            605.00, 601.80, 634.40, 633.40, 606.00
+        ];
+        
+        // Datos de rangos por subgrupo para el gráfico R (calculados previamente)
+        const rangeData = [
+            89, 99, 146, 114, 96, 
+            128, 125, 162, 141, 92, 
+            130, 156, 148, 110, 160, 
+            140, 115, 229, 188, 196
+        ];
+        
+        // Límites de control para X-barra
+        const xbarUCL = 655.12;  // LSC
+        const xbarCL = 597.77;   // Línea Central (media de las medias)
+        const xbarLCL = 540.42;  // LIC
+        
+        // Límites de control para Rango
+        const rangeUCL = 196.88;  // LSC
+        const rangeCL = 93.13;    // Línea Central (media de rangos)
+        const rangeLCL = 0;       // LIC
+        
+        // Inicializar gráficos al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar gráfico X-barra
+            const xbarCtx = document.getElementById('xbar-chart').getContext('2d');
+            const xbarChart = new Chart(xbarCtx, {
+                type: 'line',
+                data: {
+                    labels: subgroupNumbers,
+                    datasets: [
+                        {
+                            label: 'Media por Subgrupo',
+                            data: xbarData,
+                            borderColor: '#3498db',
+                            backgroundColor: '#3498db',
+                            tension: 0.1,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'LSC',
+                            data: Array(subgroupNumbers.length).fill(xbarUCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'Línea Central',
+                            data: Array(subgroupNumbers.length).fill(xbarCL),
+                            borderColor: '#2ecc71',
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'LIC',
+                            data: Array(subgroupNumbers.length).fill(xbarLCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Control X-barra - Tiempo de Respuesta en Servicios de Emergencia',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Tiempo (minutos)'
+                            },
+                            min: 500,
+                            max: 700
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Subgrupo'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Inicializar gráfico de Rango
+            const rangeCtx = document.getElementById('range-chart').getContext('2d');
+            const rangeChart = new Chart(rangeCtx, {
+                type: 'line',
+                data: {
+                    labels: subgroupNumbers,
+                    datasets: [
+                        {
+                            label: 'Rango por Subgrupo',
+                            data: rangeData,
+                            borderColor: '#9b59b6',
+                            backgroundColor: '#9b59b6',
+                            tension: 0.1,
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'LSC',
+                            data: Array(subgroupNumbers.length).fill(rangeUCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'Línea Central',
+                            data: Array(subgroupNumbers.length).fill(rangeCL),
+                            borderColor: '#2ecc71',
+                            pointRadius: 0,
+                            fill: false
+                        },
+                        {
+                            label: 'LIC',
+                            data: Array(subgroupNumbers.length).fill(rangeLCL),
+                            borderColor: '#e74c3c',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Gráfico de Control de Rango - Tiempo de Respuesta en Servicios de Emergencia',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Rango (minutos)'
+                            },
+                            min: 0,
+                            max: 250
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Subgrupo'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Función para cambiar entre gráficos
+        function showChart(chartId) {
+            const xbarChart = document.getElementById('xbar-chart');
+            const rangeChart = document.getElementById('range-chart');
+            const tabs = document.querySelectorAll('.tab');
+            
+            if (chartId === 'xbar-chart') {
+                xbarChart.style.display = 'block';
+                rangeChart.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            } else {
+                xbarChart.style.display = 'none';
+                rangeChart.style.display = 'block';
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
